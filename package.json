@@ -1,0 +1,29 @@
+{
+  "name": "google-authorize",
+  "version": "1.0.0",
+  "description": "Get an OAuth2 client with authorized token to be used with googleapis.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kurtlocker/google-authorize.git"
+  },
+  "keywords": [
+    "googleapis",
+    "google",
+    "authorize",
+    "auth",
+    "google-auth"
+  ],
+  "author": "kmedley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kurtlocker/google-authorize/issues"
+  },
+  "homepage": "https://github.com/kurtlocker/google-authorize#readme",
+  "dependencies": {
+    "google-auth-library": "^0.10.0"
+  }
+}
