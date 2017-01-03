@@ -2,7 +2,6 @@
 
 Get an OAuth2 client with authorized token to be used with googleapis.
 
----
 
 All I want for christmas is to be able to easily start working with the googleapis. There is a nice [Node quickstart](https://developers.google.com/sheets/api/quickstart/nodejs) that Google provided that allows this. This module is a wrapper of that code but instead of executing a callback function with the resultant OAuth2 client, it returns a Promise that is _thenable_ which resolves the OAuth2 client.
 
