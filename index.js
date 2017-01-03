@@ -124,8 +124,3 @@ class GoogleAuthorize {
   }
 }
 module.exports = GoogleAuthorize;
-
-let ga = new GoogleAuthorize(['spreadsheets']);
-ga.authorize().then(auth => {
-  console.log(auth);
-})
