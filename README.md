@@ -1,9 +1,9 @@
 #Google Authorize
 
-Get an OAuth2 client with authorized token to be used with googleapis.
+Get an OAuth2 client with an authorized token to be used with Google APIs.
 
 
-All I want for christmas is to be able to easily start working with the googleapis. There is a nice [Node quickstart](https://developers.google.com/sheets/api/quickstart/nodejs) that Google provided that allows this. This module is a wrapper of that code but instead of executing a callback function with the resultant OAuth2 client, it returns a Promise that is _thenable_ which resolves the OAuth2 client.
+All I want for Christmas is to be able to easily start working with the Google APIs. There is a nice [Node quickstart](https://developers.google.com/sheets/api/quickstart/nodejs) that Google provides for this. This module is a wrapper of that code but instead of executing a callback function that passes a resultant OAuth2 client, it returns a Promise that is _thenable_ which resolves the OAuth2 client.
 
 Here's how to use it:
 
@@ -11,27 +11,20 @@ Visit [Node quickstart](https://developers.google.com/sheets/api/quickstart/node
 
 ```bash
 npm i google-authorize --save
-npm i googleapis --save
 ```
 
 ```javascript
 const GoogleAuthorize = require('google-authorize');
-// Used to make requests to the googleapis
-const google = require('googleapis');
 
 // Use an array of scopes that correlate to to googleapi scopes
 // i.e. ['spreadsheets'] -> https://www.googleapis.com/auth/spreadsheets
 const googleAuth = new GoogleAuthorize(['spreadsheets']);
 
-// Use the example function, listMajors, from Google
+// Authorize and then make a request to the sheets API
 googleAuth.authorize().then(listMajors);
 
-/**
- * Print the names and majors of students in a sample spreadsheet:
- * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
- */
 function listMajors(auth) {
-  var sheets = google.sheets('v4');
+  var sheets = require('googleapis').sheets('v4');
   sheets.spreadsheets.values.get({
     auth: auth,
     spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
