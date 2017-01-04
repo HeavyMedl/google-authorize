@@ -1,7 +1,7 @@
 {
   "name": "google-authorize",
-  "version": "1.0.0",
-  "description": "Get an OAuth2 client with authorized token to be used with googleapis.",
+  "version": "1.0.1",
+  "description": "Get an OAuth2 client with authorized token to be used with Google APIs.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
