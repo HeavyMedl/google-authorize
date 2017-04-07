@@ -1,4 +1,4 @@
-#Google Authorize
+# Google Authorize
 
 Get an OAuth2 client with an authorized token to be used with Google APIs.
 
