@@ -48,4 +48,7 @@ function listMajors(auth) {
   });
 }
 
+## Change Log
+Nov 6 2018 - Fixed undefined callback on fs.writeFile
+
 ```
