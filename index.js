@@ -18,12 +18,12 @@ class GoogleAuthorize {
     this.SCOPES = (scopes => {
       let _scopes = [];
       (scopes || []).forEach(scope => {
-        _scopes.push('https://www.googleapis.com/auth/'+scope);
+        _scopes.push('https://www.googleapis.com/auth/' + scope);
       });
       return _scopes;
     })(scopes);
     this.TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
-        process.env.USERPROFILE) + '/.credentials/';
+      process.env.USERPROFILE) + '/.credentials/';
     this.TOKEN_PATH = this.TOKEN_DIR + 'googleapis.json';
   }
   /**
@@ -119,7 +119,9 @@ class GoogleAuthorize {
         throw err;
       }
     }
-    fs.writeFile(this.TOKEN_PATH, JSON.stringify(token));
+    fs.writeFile(this.TOKEN_PATH, JSON.stringify(token), (err) => {
+      if (err) throw err;
+    });
     console.log('Token stored to ' + this.TOKEN_PATH);
   }
 }
