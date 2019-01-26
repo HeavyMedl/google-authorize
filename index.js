@@ -1,23 +1,29 @@
 const fs = require('fs');
 const readline = require('readline');
-const googleAuth = require('google-auth-library');
+const GoogleAuth = require('google-auth-library');
 
+/**
+ * Returns an authorized OAuth2 client back to the requester to facilitiate
+ * interaction with Google APIs.
+ *
+ * @class GoogleAuthorize
+ */
 class GoogleAuthorize {
   /**
    * Default constructor
-   * @param {array} scopes An array representing the scopes to authorize for the
-   *                       oauth2Client. Example ['spreadsheets'] would correlate
-   *                       with ..googleapis.com/auth/spreadsheets.
+   * @param {array} scopes An array representing the scopes
+   *  to authorize for the oauth2Client. Example ['spreadsheets'] would
+   *  correlate with ..googleapis.com/auth/spreadsheets.
    */
   constructor(scopes) {
     // If modifying these scopes, delete your previously saved credentials
-    // at ~/.credentials/sheets.api.json
+    // at ~/.credentials/credentials.json
     if (!Array.isArray(scopes)) {
       throw new Error('Initialize with array of scope names.');
     }
-    this.SCOPES = (scopes => {
-      let _scopes = [];
-      (scopes || []).forEach(scope => {
+    this.SCOPES = ((scopes) => {
+      const _scopes = [];
+      (scopes || []).forEach((scope) => {
         _scopes.push('https://www.googleapis.com/auth/' + scope);
       });
       return _scopes;
@@ -36,16 +42,17 @@ class GoogleAuthorize {
   authorize() {
     return new Promise((resolve, reject) => {
       // Load client secrets from a local file.
-      fs.readFile('client_secret.json', function processClientSecrets(err, content) {
-        if (err) {
-          console.log('Error loading client secret file: ' + err);
-          reject(err);
-          return;
-        }
-        // Authorize a client with the loaded credentials, then call the
-        // Google Sheets API.
-        resolve(this._authorize(JSON.parse(content)));
-      }.bind(this));
+      fs.readFile('credentials.json',
+          function processClientSecrets(err, content) {
+            if (err) {
+              console.error('Error loading credentials.json file: ' + err);
+              reject(err);
+              return;
+            }
+            // Authorize a client with the loaded credentials, then call the
+            // Google Sheets API.
+            resolve(this._authorize(JSON.parse(content)));
+          }.bind(this));
     });
   }
   /**
@@ -54,13 +61,14 @@ class GoogleAuthorize {
    *
    * @param {Object} credentials The authorization client credentials.
    * @param {function} callback The callback to call with the authorized client.
+   * @return {Promise}
    */
   _authorize(credentials) {
-    var clientSecret = credentials.installed.client_secret;
-    var clientId = credentials.installed.client_id;
-    var redirectUrl = credentials.installed.redirect_uris[0];
-    var auth = new googleAuth();
-    var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    const clientSecret = credentials.installed.client_secret;
+    const clientId = credentials.installed.client_id;
+    const redirectUrl = credentials.installed.redirect_uris[0];
+    const auth = new GoogleAuth();
+    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
     return new Promise((resolve, reject) => {
       // Check if we have previously stored a token.
@@ -78,26 +86,29 @@ class GoogleAuthorize {
    * Get and store new token after prompting for user authorization, and then
    * execute the given callback with the authorized OAuth2 client.
    *
-   * @param {google.auth.OAuth2} oauth2Client The OAuth2 client to get token for.
-   * @param {function} resolve Returns a Promise object that is resolved with the given value
-   * @param {function} reject Returns a Promise object that is rejected with the given reason.
+   * @param {google.auth.OAuth2} oauth2Client The OAuth2 client
+   *  to get token for.
+   * @param {function} resolve Returns a Promise object that is
+   *  resolved with the given value
+   * @param {function} reject Returns a Promise object that is
+   *  rejected with the given reason.
    */
   getNewToken(oauth2Client, resolve, reject) {
-    var authUrl = oauth2Client.generateAuthUrl({
+    const authUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
-      scope: this.SCOPES
+      scope: this.SCOPES,
     });
     console.log('Authorize this app by visiting this url: ', authUrl);
-    var rl = readline.createInterface({
+    const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
-    rl.question('Enter the code from that page here: ', code => {
+    rl.question('Enter the code from that page here: ', (code) => {
       rl.close();
       oauth2Client.getToken(code, (err, token) => {
         if (err) {
           console.log('Error while trying to retrieve access token', err);
-          reject(err)
+          reject(err);
           return;
         }
         oauth2Client.credentials = token;
