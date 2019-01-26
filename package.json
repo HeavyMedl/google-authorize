@@ -1,6 +1,6 @@
 {
   "name": "google-authorize",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Get an OAuth2 client with authorized token to be used with Google APIs.",
   "main": "index.js",
   "scripts": {
