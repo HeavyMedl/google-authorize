@@ -11,11 +11,14 @@ const GoogleAuth = require('google-auth-library');
 class GoogleAuthorize {
   /**
    * Default constructor
-   * @param {array} scopes An array representing the scopes
+   * @param {Array} scopes An array representing the scopes
    *  to authorize for the oauth2Client. Example ['spreadsheets'] would
    *  correlate with ..googleapis.com/auth/spreadsheets.
+   * @param {String} credentialsPath Where your Google credentials.json lives.
+   *  Defaults to 'credentials.json' which is relative to your execution
+   *  context.
    */
-  constructor(scopes) {
+  constructor(scopes, credentialsPath) {
     // If modifying these scopes, delete your previously saved credentials
     // at ~/.credentials/credentials.json
     if (!Array.isArray(scopes)) {
@@ -31,6 +34,7 @@ class GoogleAuthorize {
     this.TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
       process.env.USERPROFILE) + '/.credentials/';
     this.TOKEN_PATH = this.TOKEN_DIR + 'googleapis.json';
+    this.credentialsPath = credentialsPath || 'credentials.json';
   }
   /**
    * Returns a promise representing the authorization process. If successful,
@@ -42,17 +46,17 @@ class GoogleAuthorize {
   authorize() {
     return new Promise((resolve, reject) => {
       // Load client secrets from a local file.
-      fs.readFile('credentials.json',
-          function processClientSecrets(err, content) {
-            if (err) {
-              console.error('Error loading credentials.json file: ' + err);
-              reject(err);
-              return;
-            }
-            // Authorize a client with the loaded credentials, then call the
-            // Google Sheets API.
-            resolve(this._authorize(JSON.parse(content)));
-          }.bind(this));
+      fs.readFile(this.credentialsPath,
+        function processClientSecrets(err, content) {
+          if (err) {
+            console.error('Error loading credentials.json file: ' + err);
+            reject(err);
+            return;
+          }
+          // Authorize a client with the loaded credentials, then call the
+          // Google Sheets API.
+          resolve(this._authorize(JSON.parse(content)));
+        }.bind(this));
     });
   }
   /**
